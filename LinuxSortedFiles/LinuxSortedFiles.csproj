@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>ResoniteLinuxSortedFiles</RootNamespace>
-		<AssemblyName>ResoniteLinuxSortedFiles</AssemblyName>
+		<RootNamespace>LinuxSortedFiles</RootNamespace>
+		<AssemblyName>LinuxSortedFiles</AssemblyName>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<TargetFramework>net10.0</TargetFramework>
 		<FileAlignment>512</FileAlignment>

@@ -1,6 +1,6 @@
-# ResoniteLinuxSortedFiles
+# LinuxSortedFiles
 
-A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader) mod for [Resonite](https://resonite.com/) that improves the behavior of the Files dashboard tab on Linux, by sorting files by name.
+A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader) mod for [Resonite](https://resonite.com/) that improves the behavior of the Files dashboard tab on Linux, by sorting files by name and fixing a handful of other Linux-specific issues.
 
 This is a RML-compatible rewrite of [this BepisLoader mod by NepuShiro](https://github.com/NepuShiro/ResoniteLinuxSortedFiles).
 
@@ -10,7 +10,7 @@ This mod should only be used on Linux. This mod is unnecessary (and unsupported)
 
 - Locate your Resonite install folder. It should be at `~/.steam/steam/steamapps/common/Resonite` for a default install.
 - In your Resonite install folder, enter the `rml_mods` subfolder. It should already exist if you installed RML properly.
-- Download [ResoniteLinuxSortedFiles.dll](https://github.com/Baplar/ResoniteLinuxSortedFiles/releases/latest/download/ResoniteLinuxSortedFiles.dll) and place it in the `rml_mods` folder.
+- Download [LinuxSortedFiles.dll](https://github.com/Baplar/ResoniteLinuxSortedFiles/releases/latest/download/LinuxSortedFiles.dll) and place it in the `rml_mods` folder.
 
 ## License
 

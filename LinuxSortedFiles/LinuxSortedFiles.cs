@@ -9,11 +9,11 @@ using FrooxEngine;
 using HarmonyLib;
 using ResoniteModLoader;
 
-namespace ResoniteLinuxSortedFiles;
+namespace LinuxSortedFiles;
 
 public class Mod : ResoniteMod {
 	internal const string VERSION_CONSTANT = "1.0.0";
-	public override string Name => "ResoniteLinuxSortedFiles";
+	public override string Name => "LinuxSortedFiles";
 	public override string Author => "Baplar";
 	public override string Version => VERSION_CONSTANT;
 	public override string Link => "https://github.com/Baplar/ResoniteLinuxSortedFiles";
@@ -23,7 +23,7 @@ public class Mod : ResoniteMod {
 			Mod.Warn("This mod only works on Linux. Skipping.");
 			return;
 		}
-		Harmony harmony = new Harmony("fr.Baplar.ResoniteLinuxSortedFiles");
+		Harmony harmony = new Harmony("fr.baplar.LinuxSortedFiles");
 		harmony.PatchAll();
 	}
 }
