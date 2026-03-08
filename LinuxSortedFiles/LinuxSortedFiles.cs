@@ -5,30 +5,34 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 
+using Elements.Assets;
+
 using FrooxEngine;
+
 using HarmonyLib;
+
 using ResoniteModLoader;
 
 namespace LinuxSortedFiles;
 
 public class Mod : ResoniteMod {
-	internal const string VERSION_CONSTANT = "1.0.0";
+	internal const string VERSION_CONSTANT = "1.1.0";
 	public override string Name => "LinuxSortedFiles";
 	public override string Author => "Baplar";
 	public override string Version => VERSION_CONSTANT;
 	public override string Link => "https://github.com/Baplar/ResoniteLinuxSortedFiles";
 
 	public override void OnEngineInit() {
-		if (Engine.Current.Platform != Platform.Linux) {
-			Mod.Warn("This mod only works on Linux. Skipping.");
-			return;
-		}
 		Harmony harmony = new Harmony("fr.baplar.LinuxSortedFiles");
-		harmony.PatchAll();
+		harmony.PatchAllUncategorized();
+		if (Engine.Current.Platform == Platform.Linux) {
+			harmony.PatchCategory("Linux");
+		}
 	}
 }
 
 [HarmonyPatch(typeof(FileBrowser))]
+[HarmonyPatchCategory("Linux")]
 public static class FileBrowserPatches {
 	[HarmonyPrefix]
 	[HarmonyPatch(typeof(BrowserDialog), "BeginGenerateToolPanel")]
@@ -51,9 +55,8 @@ public static class FileBrowserPatches {
 	[HarmonyTranspiler]
 	[HarmonyPatch("Refresh", MethodType.Async)]
 	public static IEnumerable<CodeInstruction> Refresh_Transpiler(IEnumerable<CodeInstruction> instructions) {
-		foreach (CodeInstruction instruction in instructions){
-			if (instruction.opcode == OpCodes.Call && instruction.operand is MethodInfo method)
-			{
+		foreach (CodeInstruction instruction in instructions) {
+			if (instruction.opcode == OpCodes.Call && instruction.operand is MethodInfo method) {
 				if (method == GetFilesOriginal) {
 					yield return new CodeInstruction(OpCodes.Call, GetFilesReplacement);
 					continue;
@@ -88,5 +91,29 @@ public static class FileBrowserPatches {
 	public static string[] GetLogicalDrives() {
 		Mod.Debug("Running GetLogicalDrives");
 		return ["/"];
+	}
+}
+
+[HarmonyPatch(typeof(RecordDirectory))]
+public static class RecordDirectoryPatches {
+	[HarmonyPostfix]
+	[HarmonyPatch(typeof(RecordDirectory), "ProcessContents", [typeof(List<FrooxEngine.Store.Record>), typeof(bool)])]
+	public static void ProcessContents_Postfix(RecordDirectory __instance) {
+		SortDirsStripped(__instance);
+	}
+
+	[HarmonyPostfix]
+	[HarmonyPatch(typeof(RecordDirectory), MethodType.Constructor, [typeof(Engine), typeof(List<RecordDirectory>), typeof(List<FrooxEngine.Store.Record>)])]
+	public static void Construtor_Postfix(RecordDirectory __instance) {
+		SortDirsStripped(__instance);
+	}
+
+	private static void SortDirsStripped(RecordDirectory directory) {
+		AccessTools
+			.FieldRefAccess<RecordDirectory, List<RecordDirectory>>(directory, "subdirectories")
+			.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(
+				new StringRenderTree(a.Name).GetRawString(),
+				new StringRenderTree(b.Name).GetRawString()
+			));
 	}
 }
